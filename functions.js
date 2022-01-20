@@ -128,6 +128,10 @@ export class Funcs {
                   const amount = resposta.amount
 
                   this.addAmount(accountName, amount)
+                  console.log(
+                    chalk.bgGreen.black('Deposito efetuado com sucesso!')
+                  )
+                  operation()
                 })
                 .catch(err => console.log(err))
             }
@@ -184,6 +188,84 @@ export class Funcs {
                   const amount = resposta.amount
 
                   this.deleteAmount(accountName, amount)
+
+                  operation()
+                })
+                .catch(err => console.log(err))
+            }
+          })
+          .catch(err => console.log(err))
+      })
+      .catch(err => console.log(err))
+  }
+
+  //Tranfere um valor para outra conta
+  static transferAmount() {
+    inquirer
+      .prompt([
+        {
+          name: 'accountName',
+          message: 'Qual o nome sua conta?'
+        }
+      ])
+      .then(resposta => {
+        const accountName = resposta.accountName
+
+        //Verifica se a conta existe
+        if (!this.checksIfAccountExists(accountName)) {
+          return this.transferAmount()
+        }
+
+        //Se exister peça e verifique a senha
+
+        inquirer
+          .prompt([
+            {
+              name: 'senha',
+              message: 'Digite sua senha:'
+            }
+          ])
+          .then(resposta => {
+            const senha = resposta.senha
+            const vericaSenha = this.verifiesIfPasswordIsCorrect(
+              accountName,
+              senha
+            )
+            if (!vericaSenha) {
+              return this.transferAmount()
+            } else {
+              //Se a senha for correta pergunte o valor a ser depositado
+              inquirer
+                .prompt([
+                  {
+                    name: 'conta2',
+                    message: 'Para qual conta você deseja transferir?'
+                  }
+                ])
+                .then(resposta => {
+                  const accountName2 = resposta.conta2
+
+                  //Verifica se a conta de transferência existe
+                  if (!this.checksIfAccountExists(accountName2)) {
+                    return this.transferAmount()
+                  }
+
+                  inquirer
+                    .prompt([
+                      {
+                        name: 'amount',
+                        message: 'Quanto você deseja transferir?'
+                      }
+                    ])
+                    .then(resposta => {
+                      const amount = resposta.amount
+
+                      this.deleteAndAddAmount(accountName, accountName2, amount)
+
+                      
+                      operation()
+                    })
+                    .catch(err => console.log(err))
                 })
                 .catch(err => console.log(err))
             }
@@ -248,6 +330,7 @@ export class Funcs {
     accounts.forEach(conta => {
       console.log(conta.split('.')[0])
     })
+    operation()
   }
 
   //Recupera a senha
@@ -349,15 +432,12 @@ export class Funcs {
         console.log(err)
       }
     )
-
-    console.log(chalk.bgGreen.black('Deposito efetuado com sucesso!'))
-    operation()
   }
 
   //Adiciona um valor ao saque da conta
   static deleteAmount(accountName, amount) {
     if (!amount) {
-      console.log(chalk.bgRed.black('Insira um valor de depósito!'))
+      console.log(chalk.bgRed.black('Insira um valor de saque!'))
       return operation()
     }
 
@@ -368,7 +448,7 @@ export class Funcs {
 
     if (parsedBalance < parsedAmount) {
       console.log(chalk.bgRed.black('Valor de saque indisponível na conta!'))
-      return operation()
+      return false
     }
 
     console.log('Valor sacado: ' + chalk.red(`R$${amount}`))
@@ -384,8 +464,53 @@ export class Funcs {
         console.log(err)
       }
     )
-
     console.log(chalk.bgGreen.black('Saque efetuado com sucesso!'))
-    operation()
+  }
+
+  //Executa a tranferência de uma conta para outra
+  static deleteAndAddAmount(accountName, accountName2, amount) {
+    if (!amount) {
+      console.log(chalk.bgRed.black('Insira um valor de transferência!'))
+      return
+    }
+
+    const account = this.getAccount(accountName)
+    const account2 = this.getAccount(accountName2)
+
+    const parsedBalance = parseFloat(account.balance)
+    const parsedBalance2 = parseFloat(account2.balance)
+    const parsedAmount = parseFloat(amount)
+
+    if (parsedBalance < parsedAmount) {
+      console.log(chalk.bgRed.black('Valor de transferência indisponível na conta!'))
+      return false
+    }
+
+    const novoSaldo = (account.balance = parsedBalance - parsedAmount)
+    account2.balance = parsedBalance2 + parsedAmount
+
+    fs.writeFileSync(
+      `./accounts/${accountName}.json`,
+      JSON.stringify(account),
+      err => {
+        console.log(err)
+      }
+    )
+
+    fs.writeFileSync(
+      `./accounts/${accountName2}.json`,
+      JSON.stringify(account2),
+      err => {
+        console.log(err)
+      }
+    )
+
+    
+
+    console.log('Transferido: ' + chalk.red(`R$${amount}`))
+    console.log(`Saldo anterior: R$${account.balance}`)
+
+    console.log('Saldo atual: ' + chalk.green(`R$${novoSaldo}`))
+    console.log(chalk.bgGreen.black(`Transferência de R${amount} para ${accountName2} realizada com sucesso!`))
   }
 }

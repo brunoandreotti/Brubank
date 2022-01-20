@@ -18,6 +18,7 @@ export function operation() {
         'Consultar saldo',
         'Depositar',
         'Sacar',
+        'Transferir',
         'Verificar contas existentes',
         'Recuperar senha',
         'Sair'
@@ -44,6 +45,8 @@ export function operation() {
       } else if (escolha === 'Sair') {
         console.log(chalk.bgCyan.black('Obrigado por usar o Brubank!'))
         process.exit()
+      } else if (escolha === 'Transferir') {
+        Funcs.transferAmount()
       }
     })
     .catch(err => console.log(err))
