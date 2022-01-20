@@ -8,7 +8,7 @@ operation()
 
 // Functions
 export function operation() {
-  console.log(chalk.bgYellow.black.bold('Seja bem vinde ao Brubank!'))
+  console.log(chalk.bgBlack.blue.bold('Seja bem vinde ao Brubank!'))
   const perguntaInicial = inquirer.prompt([
     {
       type: 'list',
