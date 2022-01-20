@@ -40,7 +40,7 @@ export function operation() {
       } else if (escolha === 'Verificar contas existentes') {
         Funcs.checksExistingAccounts()
       } else if (escolha === 'Recuperar senha') {
-        
+        Funcs.forgotPassword()
       } else if (escolha === 'Sair') {
         console.log(chalk.bgCyan.black('Obrigado por usar o Brubank!'))
         process.exit()

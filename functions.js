@@ -259,7 +259,7 @@ export class Funcs {
           message: 'Qual o nome sua conta?'
         }
       ])
-      .then((resposta) => {
+      .then(resposta => {
         const accountName = resposta.accountName
 
         //Verifica se a conta existe
@@ -267,17 +267,28 @@ export class Funcs {
           return this.forgotPassword()
         }
 
-        //Se exister peça e verifique a senha
+        //Se existir faz a pergunta para recuperar a senha
+
+        const account = this.getAccount(accountName)
 
         inquirer
           .prompt([
             {
-              name: 'senha',
-              message: 'Digite sua senha:'
+              name: 'pergunta',
+              message: account.perguntaSenha
             }
-          ]).then().catch()
-
-
+          ])
+          .then(resposta => {
+            if (resposta.pergunta != account.palavraChave) {
+              console.log(chalk.bgRed.black('Palavra chave incorreta!'))
+              operation()
+              return
+            } else {
+              console.log('A sua senha é: ' + chalk.green(account.senha))
+              operation()
+            }
+          })
+          .catch(err => console.log(err))
       })
       .catch(err => console.log(err))
   }
