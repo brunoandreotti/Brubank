@@ -9,7 +9,7 @@
  <p align="center">
   <a href="#sobre">Sobre</a> |
   <a href="#conhecimentos-praticados"> Conhecimentos Praticados </a> |
-  <a href="#instalando-e-rodando-o-projetoo"> Acessando o projeto </a> |  
+  <a href="#instalando-e-rodando-o-projeto"> Instalando e rodando o projeto </a> |  
   <a href="#tecnologias-utilizadas"> Tecnologias utilizadas </a>      
        <br />
     <br />
