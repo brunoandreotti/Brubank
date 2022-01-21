@@ -40,7 +40,7 @@ O objetivo do projeto foi criar um pequeno sistema de banco com a finalidade de 
   É possível criar uma conta nova escolhendo um nome, uma senha, uma pergunta para a recuperação da senha e uma palavra-chave para a pergunta.
 
 ## • Consulta de saldo
-  É possível consultar o saldo existente na conta utilizando o nome da conta e a senha da conta.
+  É possível consultar o saldo existente na conta utilizando o nome e a senha da conta.
 
 ## • Depósito
   É possível fazer um depósito de uma quantia desejada utilizando o nome e a senha da conta.
@@ -52,7 +52,7 @@ O objetivo do projeto foi criar um pequeno sistema de banco com a finalidade de 
   É possível fazer tranfêrencia de uma conta existe para outra conta existente utilizando o nome e a senha da conta e o nome da conta que receberá a transferência.
 
 ## • Veriricação de contas existentes
-  É possível verificar quais as contas existentes no banco
+  É possível verificar quais as contas existentes no banco.
 
 ## • Recureração de senha
   É possível recuperar a senha de uma conta respondendo corretamente a pergunta de recuperação de senha com a palavra-chave escolhida no cadastro.
